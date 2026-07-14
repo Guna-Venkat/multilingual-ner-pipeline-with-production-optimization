@@ -5,21 +5,43 @@
 [![Transformers](https://img.shields.io/badge/🤗%20Transformers-4.30+-yellow.svg)](https://github.com/huggingface/transformers)
 [![ONNX Runtime](https://img.shields.io/badge/ONNX-Runtime-blue.svg)](https://onnxruntime.ai/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
 
-An industrial-grade pipeline for **Multilingual Named Entity Recognition (NER)** featuring state-of-the-art model compression and latency optimization techniques (Knowledge Distillation, Optuna tuning, and INT8 ONNX dynamic quantization) designed for high-throughput, low-latency CPU production deployments.
+An end-to-end research and optimization pipeline for **Multilingual Named Entity Recognition (NER)** featuring model compression and CPU acceleration techniques (Knowledge Distillation, Optuna hyperparameter tuning, and INT8 ONNX dynamic quantization) designed for resource-constrained environments.
+
+---
+
+## 💡 Project Highlights
+
+- **🌍 Multilingual Scope**: Supports NER across 5 languages (EN, DE, FR, ES, RU).
+- **🧠 Knowledge Distillation**: Compresses representation capabilities from `xlm-roberta-large` to `xlm-roberta-base`.
+- **⚙️ Bayesian Optimization**: Optimizes distillation parameters ($T$, $\alpha$) via a 36-trial Optuna SQLite study.
+- **📦 8.1× Model Compression**: Reduces storage footprint from 2.24 GB to 278 MB.
+- **🚀 Accelerated Serving**: Traces to ONNX Runtime with dynamic INT8 quantization for CPU deployment.
+- **📊 Error Diagnostics**: Analyzes zero-shot generalization and subword boundary alignment anomalies.
+
+---
+
+## 📊 Key Results
+
+Below is the consolidated performance table across all pipeline optimization stages:
+
+| Model Variant | Size | Compression | Latency (p95 CPU) | Performance Metric | Evaluation Dataset Scope |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Teacher** (`xlm-roberta-large`) | 2.24 GB | 1.00× | 450.0 ms | **86.12% F1** | Entity-level micro-F1 (Full EN, DE, FR test set) |
+| **Student Baseline** (`xlm-roberta-base`) | 1.11 GB | 2.01× | 120.0 ms | **82.90% F1** | Entity-level micro-F1 (Full EN, DE, FR test set) |
+| **Optuna Tuned Student** | 1.11 GB | 2.01× | 120.0 ms | **71.77% F1** | Validation F1 (Subsampled EN & DE validation split) |
+| **Quantized ONNX (INT8)** | **278 MB** | **~8.1×** | **78.9 ms** | **89.92% Acc** | Token classification accuracy (252-sample benchmarking subset) |
+
+### Optimization Performance Visualized
+![Model Footprint and Speedup Comparisons](figures/latency/model_optimization_benchmarks.png)
 
 ---
 
 ## 🎯 Project Motivation & Research Problem
 
-State-of-the-art transformer architectures like `XLM-RoBERTa-large` (~560M parameters) provide exceptional accuracy for multilingual sequence labeling tasks. However, deploying such massive models in real-world settings exposes severe constraints:
+State-of-the-art transformer architectures like `XLM-RoBERTa-large` (~560M parameters) provide exceptional accuracy for multilingual sequence labeling tasks. However, deploying such massive models in real-world settings exposes severe latency constraints on standard CPU server environments, and drives up cloud operational costs.
 
-- **High Latency SLAs**: Real-time APIs require low inference latencies (e.g., <50ms), while raw large transformers require 400ms+.
-- **Computational Overhead**: Deploying large models requires expensive GPU infrastructure, driving up cloud operational costs.
-- **Resource Constraints**: Edge devices and microservice environments have strict memory bounds.
-
-This project addresses the research question: **Can we compress a 560M parameter multilingual encoder to run under 80ms on a standard CPU while maintaining a small performance gap (82.90% vs. 86.12% micro-F1, preserving ~96.2% of the teacher's baseline F1 score)?**
+This project investigates whether a multilingual transformer can be compressed using knowledge distillation and INT8 quantization while maintaining competitive multilingual NER performance under CPU-only deployment constraints.
 
 ---
 
@@ -65,57 +87,11 @@ graph LR
 
 ---
 
-## 📂 Repository Structure
-
-```bash
-multilingual-ner-optimized/
-├── configs/                            # Configuration files
-│   ├── teacher.yaml                    # Hyperparameters for teacher model
-│   ├── distillation.yaml               # Distillation hyperparameters
-│   ├── tuning.yaml                     # Optuna search configurations
-│   └── evaluation.yaml                 # Diagnostic error analysis configurations
-├── docs/                               # Comprehensive design documentation
-│   ├── architecture.md                 # System architecture and design choices
-│   ├── experiments.md                  # Detailed training runs & configurations
-│   ├── datasets.md                     # Dataset details & subword alignment
-│   ├── metrics.md                      # Metric formulations and benchmarks
-│   ├── limitations.md                  # Known tradeoffs and limitations
-│   ├── future_work.md                  # Optimization roadmap
-│   └── implementation_details.md       # Mathematical loss & ONNX session details
-├── figures/                            # Organized visual artifacts
-│   ├── attention/                      # Hyperparameter sensitivity plots
-│   ├── oracle/                         # Baseline training/distillation charts
-│   ├── evaluation/                     # Confusion matrices & error charts
-│   ├── latency/                        # Speedup & latency subplots
-│   ├── memory/                         # Footprint & size comparisons
-│   └── qualitative/                    # Exploratory data visualizations
-├── outputs/                            # Organized experimental outputs
-│   ├── csv/                            # CSV performance tables
-│   ├── json/                           # JSON training runs and Optuna reports
-│   ├── plots/                          # PNG/HTML export duplicates
-│   ├── logs/                           # System trainer state histories
-│   └── predictions/                    # Mined hard examples & predictions
-├── src/                                # Reusable package library
-│   ├── configs/                        # YAML loaders & schemas
-│   ├── data/                           # Text loaders & aligns
-│   ├── evaluation/                     # Error diagnostics & metrics
-│   ├── models/                         # Model loader & ONNX inference wrapper
-│   ├── optimization/                   # Quantizer & Optuna study runners
-│   └── plots/                          # Plotting helpers (Matplotlib/Plotly)
-├── tests/                              # Pytest unit testing suite
-├── Dockerfile                          # Multi-stage production container
-├── docker-compose.yml                  # Service orchestration config
-├── RESULTS.md                          # Comprehensive experimental results log
-└── README.md                           # This document
-```
-
----
-
 ## 🛠️ Quick Start
 
 ### 1. Installation
 
-Clone the repository and install the production and testing dependencies:
+Clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/yourusername/multilingual-ner-optimized.git
@@ -130,34 +106,6 @@ Ensure that the source library modules and configuration schemas are fully verif
 ```bash
 python -m pytest
 ```
-
----
-
-## 📊 Dataset Profile & Exploratory Data Analysis
-
-We utilize the Hugging Face `unimelb-nlp/wikiann` dataset, a silver-standard multilingual dataset annotated with Person (`PER`), Organization (`ORG`), and Location (`LOC`) labels in BIO format.
-
-- **In-Domain Training**: English (`en`), German (`de`), and French (`fr`).
-- **Zero-Shot Evaluation**: Spanish (`es`) and Russian (`ru`).
-
-### Visualizing Dataset Qualities
-
-To understand sequence shapes and structural data biases before training, we conduct Exploratory Data Analysis (EDA):
-
-#### 1. Language Distribution Summary
-
-Displays sample volume allocations across all training and test languages.
-![Language Distribution](figures/qualitative/language_distribution.png)
-
-#### 2. NER Tag Frequencies
-
-Illustrates occurrence imbalances across person, organization, and location labels.
-![NER Tag Frequencies](figures/qualitative/ner_tag_distribution.png)
-
-#### 3. Sentence Length Distributions
-
-Assists in configuring sequence truncation settings (recommending a threshold of 128 tokens).
-![Sentence Length Distributions](figures/qualitative/sentence_length_analysis.png)
 
 ---
 
@@ -199,53 +147,31 @@ quantize_onnx_model("./model.onnx", "./model_quantized.onnx")
 
 ---
 
-## 📈 Experimental Results & Performance Analysis
+## 📂 Repository Structure
 
-Detailed results, parameter logs, and metrics are documented in [RESULTS.md](RESULTS.md).
-
-| Model Variant | Size | Compression | Latency (p95 CPU) | Performance Metric | Evaluation Dataset Scope |
-| :--- | :---: | :---: | :---: | :---: | :--- |
-| **Teacher** (`xlm-roberta-large`) | 2.24 GB | 1.00× | 450.0 ms | **86.12% F1** | Entity-level micro-F1 (Full EN, DE, FR test set) |
-| **Student Baseline** (`xlm-roberta-base`) | 1.11 GB | 2.01× | 120.0 ms | **82.90% F1** | Entity-level micro-F1 (Full EN, DE, FR test set) |
-| **Optuna Tuned Student** | 1.11 GB | 2.01× | 120.0 ms | **71.77% F1** | Validation F1 (Subsampled EN & DE validation split) |
-| **Quantized ONNX (INT8)** | **278 MB** | **~8.1×** | **78.9 ms** | **89.92% Acc** | Token classification accuracy (252-sample benchmarking subset) |
-
-*Note: Latency benchmarks were executed on a single-core CPU configuration. The 89.92% token classification accuracy for the Quantized ONNX model demonstrates high classification parity with the original student model on the benchmarking subset, while compressing the model footprint from 2.24 GB to 278 MB (~8.1× reduction).*
-
-### Detailed Performance Visualizations
-
-#### 1. Baseline Training Metrics (Teacher vs Student)
-
-Learning metrics and F1 alignment tracking throughout initial supervised fine-tuning.
-![Teacher Training Metrics](figures/oracle/teacher_training_metrics.png)
-![Student Distillation Metrics](figures/oracle/student_distillation_metrics.png)
-
-#### 2. Model Optimization Comparison
-
-A visual representation of model footprint compression and throughput improvements on CPU.
-![Model Footprint and Speedup Comparisons](figures/latency/model_optimization_benchmarks.png)
+```text
+├── configs/          # YAML configs for teacher, distillation, tuning, and evaluation
+├── docs/             # Technical design notes, experiments, metrics, and limitations
+├── figures/          # Reorganized figures (attention, oracle, evaluation, latency, qualitative)
+├── outputs/          # CSV tables, SQLite Optuna registry, JSON logs, and predictions
+├── src/              # Reusable Python package (data, models, evaluation, optimization, plots)
+├── tests/            # Pytest suite verifying model interfaces and config loaders
+├── Dockerfile        # Multi-stage CPU deployment file
+└── RESULTS.md        # Comprehensive experimental results log
+```
+*For a detailed walkthrough of file responsibilities, see [docs/architecture.md](docs/architecture.md).*
 
 ---
 
-## 🔍 Model Error Diagnostics & Diagnostics
+## 🔍 Key Visualizations
 
-We execute extensive error analysis checks on validation splits to analyze language patterns and prediction boundaries.
+### 1. Dataset Profile (WikiANN)
+Sentence length frequencies, language distributions, and label imbalances.
+![Language Distribution](figures/qualitative/language_distribution.png)
 
-#### 1. Multi-Class Confusion Matrix
-
-Shows token classification error alignments (e.g., misclassifying organizations as locations).
-![Entity Confusion Matrix](figures/evaluation/confusion_matrix.png)
-
-#### 2. Cross-Lingual F1 Generalization Heatmap
-
-Visualizes the zero-shot transfer performance of models across target languages.
+### 2. Zero-Shot Cross-Lingual Heatmap
+Analyzing F1-score zero-shot transfer drop across Spanish (Latin) and Russian (Cyrillic).
 ![Cross-Lingual Generalization Heatmap](figures/evaluation/cross_lingual_transfer.png)
-
-#### 3. Error Patterns & Tag Boundary Misses
-
-Breaks down predictions to identify boundary offsets and entity length issues.
-![Boundary Errors Analysis](figures/evaluation/boundary_errors.png)
-![Error Pattern Occurrences](figures/evaluation/error_patterns.png)
 
 ---
 
@@ -289,5 +215,3 @@ A: No. The model is specifically optimized via dynamic INT8 quantization to run 
 
 **Q: Why use XLM-RoBERTa over mBERT?**
 A: XLM-RoBERTa uses a vocabulary of 250,000 SentencePiece tokens and is trained on much larger web-scale data, showing vastly superior cross-lingual transfer capabilities.
-
-Project Link: [https://github.com/Guna-Venkat/multilingual-ner-optimized](https://github.com/Guna-Venkat/multilingual-ner-optimized)
