@@ -33,6 +33,7 @@ Below is the consolidated performance table across all pipeline optimization sta
 | **Quantized ONNX (INT8)** | **278 MB** | **~8.1×** | **78.9 ms** | **89.92% Acc** | Token classification accuracy (252-sample benchmarking subset) |
 
 ### Optimization Performance Visualized
+
 ![Model Footprint and Speedup Comparisons](figures/latency/model_optimization_benchmarks.png)
 
 ---
@@ -159,6 +160,7 @@ quantize_onnx_model("./model.onnx", "./model_quantized.onnx")
 ├── Dockerfile        # Multi-stage CPU deployment file
 └── RESULTS.md        # Comprehensive experimental results log
 ```
+
 *For a detailed walkthrough of file responsibilities, see [docs/architecture.md](docs/architecture.md).*
 
 ---
@@ -166,10 +168,12 @@ quantize_onnx_model("./model.onnx", "./model_quantized.onnx")
 ## 🔍 Key Visualizations
 
 ### 1. Dataset Profile (WikiANN)
+
 Sentence length frequencies, language distributions, and label imbalances.
 ![Language Distribution](figures/qualitative/language_distribution.png)
 
 ### 2. Zero-Shot Cross-Lingual Heatmap
+
 Analyzing F1-score zero-shot transfer drop across Spanish (Latin) and Russian (Cyrillic).
 ![Cross-Lingual Generalization Heatmap](figures/evaluation/cross_lingual_transfer.png)
 
