@@ -158,11 +158,11 @@ To preserve research integrity, several limitations must be acknowledged:
 
 This repository presents the following core contributions:
 
-- **Task-Specific Knowledge Distillation**: Successfully compressed a large cross-lingual model (`xlm-roberta-large`) into a base model (`xlm-roberta-base`), preserving over **96%** of the baseline F1 score.
+- **Task-Specific Knowledge Distillation**: Successfully compressed a large cross-lingual model (`xlm-roberta-large`) into a base model (`xlm-roberta-base`), preserving **96.26%** of the teacher's baseline F1 score ($82.90\%$ vs. $86.12\%$ micro-F1).
 - **Bayesian Hyperparameter Search**: Implemented a 36-trial Optuna study to optimize temperature and alpha, establishing the critical importance of low temperature and lower alpha on small-dataset validation targets.
-- **CPU Servable INT8 Quantization**: Integrated ONNX graph optimization and dynamic quantization to compress the student model from **2.24 GB to 278 MB (~8.1× reduction)**, delivering a production-ready model with 78.9ms latency.
+- **CPU Servable INT8 Quantization**: Integrated ONNX graph optimization and dynamic quantization to compress the student model from **2.24 GB to 278 MB (~8.1× reduction)**, delivering a deployment-ready model with 78.9ms latency.
 - **Zero-Shot Cross-Lingual Evaluation**: Systematically measured cross-lingual validation degradation on Spanish (ES) and Russian (RU) zero-shot targets.
-- **Modular Production-Grade Library**: Refactored monolithic Kaggle notebooks into a fully typed, tested, and documented Python package (`src/`) with reproducible command-line invocation drivers.
+- **Modular, Reproducible Python Package**: Refactored monolithic Kaggle notebooks into a fully typed, tested, and documented Python package (`src/`) with reproducible command-line invocation drivers.
 
 ---
 
