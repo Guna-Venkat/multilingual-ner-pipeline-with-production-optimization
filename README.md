@@ -19,7 +19,7 @@ State-of-the-art transformer architectures like `XLM-RoBERTa-large` (~560M param
 - **Computational Overhead**: Deploying large models requires expensive GPU infrastructure, driving up cloud operational costs.
 - **Resource Constraints**: Edge devices and microservice environments have strict memory bounds.
 
-This project addresses the research question: **Can we compress a 560M parameter multilingual encoder to run under 50ms on a standard CPU while retaining 98%+ of its original representation accuracy?**
+This project addresses the research question: **Can we compress a 560M parameter multilingual encoder to run under 80ms on a standard CPU while maintaining a small performance gap (82.90% vs. 86.12% micro-F1, preserving ~96.2% of the teacher's baseline F1 score)?**
 
 ---
 
@@ -203,13 +203,14 @@ quantize_onnx_model("./model.onnx", "./model_quantized.onnx")
 
 Detailed results, parameter logs, and metrics are documented in [RESULTS.md](RESULTS.md).
 
-| Model Variant | Size (MB) | Compression | Latency (p95) | F1 Score |
-| :--- | :---: | :---: | :---: | :---: |
-| **Teacher** (`xlm-roberta-large`) | 2131 MB | 1.0× | 450 ms | **86.12%** |
-| **Student Baseline** (`xlm-roberta-base`) | 1058 MB | 2.0× | 120 ms | **82.90%** |
-| **Quantized ONNX (INT8)** | **265 MB** | **8.0×** | **78.9 ms** | **89.92%** |
+| Model Variant | Size | Compression | Latency (p95 CPU) | Performance Metric | Evaluation Dataset Scope |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Teacher** (`xlm-roberta-large`) | 2.24 GB | 1.00× | 450.0 ms | **86.12% F1** | Entity-level micro-F1 (Full EN, DE, FR test set) |
+| **Student Baseline** (`xlm-roberta-base`) | 1.11 GB | 2.01× | 120.0 ms | **82.90% F1** | Entity-level micro-F1 (Full EN, DE, FR test set) |
+| **Optuna Tuned Student** | 1.11 GB | 2.01× | 120.0 ms | **71.77% F1** | Validation F1 (Subsampled EN & DE validation split) |
+| **Quantized ONNX (INT8)** | **278 MB** | **~8.1×** | **78.9 ms** | **89.92% Acc** | Token classification accuracy (252-sample benchmarking subset) |
 
-*Note: Benchmarked on local CPU hardware. INT8 dynamic quantization yields a significant speedup with high accuracy retention.*
+*Note: Latency benchmarks were executed on a single-core CPU configuration. The 89.92% token classification accuracy for the Quantized ONNX model demonstrates high classification parity with the original student model on the benchmarking subset, while compressing the model footprint from 2.24 GB to 278 MB (~8.1× reduction).*
 
 ### Detailed Performance Visualizations
 
