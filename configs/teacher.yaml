@@ -1,0 +1,13 @@
+model_name: "xlm-roberta-large"
+languages:
+  - "en"
+  - "de"
+  - "fr"
+max_length: 128
+batch_size: 16
+epochs: 3
+learning_rate: 2.0e-5
+weight_decay: 0.01
+seed: 42
+output_dir: "./models/teacher"
+max_train_samples: 20000

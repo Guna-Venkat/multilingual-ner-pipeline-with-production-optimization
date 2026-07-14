@@ -1,0 +1,41 @@
+# Python Caches & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+.virtual_documents/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Machine Learning Weights & Checkpoints (Ignore Large Files)
+*.safetensors
+*.bin
+*.onnx
+*.pt
+*.pth
+*.pkl
+*.h5
+*.model
+
+# Databases & Studies
+*.db
+*.sqlite
+
+# Local Run Artifacts and Caches
+wandb/
+.ipynb_checkpoints/
+tmp*/
+*_code.txt
+
+# Ignore large binary folders explicitly
+ner-project-results/
+notebooks/models/
+notebooks/ner-project-results/

@@ -1,0 +1,4 @@
+model_path: "./models/optuna_tuned/final_model"
+output_dir: "./models/optimized"
+max_length: 128
+n_iterations: 100

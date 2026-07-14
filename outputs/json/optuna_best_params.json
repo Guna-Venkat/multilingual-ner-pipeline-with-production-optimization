@@ -1,0 +1,11 @@
+{
+  "best_value": 0.7109805361733381,
+  "params": {
+    "alpha": 0.10459523676415396,
+    "batch_size": 32,
+    "learning_rate": 2.7544430790280434e-05,
+    "num_train_epochs": 3,
+    "temperature": 1.4266961307368469
+  },
+  "datetime": "2026-01-07T19:26:29"
+}

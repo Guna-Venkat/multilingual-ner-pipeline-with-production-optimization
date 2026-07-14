@@ -1,0 +1,13 @@
+teacher_model_path: "./models/teacher"
+student_model_name: "xlm-roberta-base"
+languages:
+  - "en"
+  - "de"
+  - "fr"
+max_length: 128
+n_trials: 25
+seed: 42
+db_path: "sqlite:///optuna.db"
+study_name: "multilingual_ner_distillation"
+output_dir: "./models/optuna_tuned"
+max_train_samples: 20000

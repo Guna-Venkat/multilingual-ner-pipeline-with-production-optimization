@@ -1,0 +1,20 @@
+model_path: "./models/optimized/deployment"
+original_model_path: "./models/optuna_tuned/final_model"
+languages:
+  - "en"
+  - "de"
+  - "fr"
+  - "es"
+  - "ru"
+sample_size: 1000
+dataset_name: "unimelb-nlp/wikiann"
+max_length: 128
+label_names:
+  - "O"
+  - "B-PER"
+  - "I-PER"
+  - "B-ORG"
+  - "I-ORG"
+  - "B-LOC"
+  - "I-LOC"
+output_dir: "./error_analysis_results"

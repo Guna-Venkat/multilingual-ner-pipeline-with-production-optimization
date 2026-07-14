@@ -1,0 +1,17 @@
+{
+  "model_sizes": {
+    "teacher_mb": 2131.843807220459,
+    "student_mb": 1058.427791595459,
+    "compression_ratio": 2.0141608375635602
+  },
+  "performance": {
+    "teacher_accuracy": 0.961577350859454,
+    "student_accuracy": 0.9504550050556118,
+    "prediction_agreement": 0.9767441860465116,
+    "total_tokens_evaluated": 989
+  },
+  "distillation_params": {
+    "temperature": 2.0,
+    "alpha": 0.5
+  }
+}

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ner-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: multilingual-ner-pipeline
+    volumes:
+      - ./models:/app/models
+      - ./configs:/app/configs
+      - ./ner-project-results:/app/ner-project-results
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - OMP_NUM_THREADS=4
+      - MKL_NUM_THREADS=4
+    restart: unless-stopped

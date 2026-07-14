@@ -1,0 +1,29 @@
+{
+  "study_info": {
+    "study_name": "multilingual_ner_distillation",
+    "n_trials": 36,
+    "best_value": 0.7109805361733381,
+    "best_params": {
+      "alpha": 0.10459523676415396,
+      "batch_size": 32,
+      "learning_rate": 2.7544430790280434e-05,
+      "num_train_epochs": 3,
+      "temperature": 1.4266961307368469
+    },
+    "datetime": "2026-01-07 19:43:30"
+  },
+  "config": {
+    "student_model": "xlm-roberta-base",
+    "languages": [
+      "en",
+      "de"
+    ],
+    "n_trials": 10
+  },
+  "trials_summary": {
+    "mean_f1": 0.20478943392912943,
+    "std_f1": 0.31594063640332054,
+    "min_f1": 0.0,
+    "max_f1": 0.7109805361733381
+  }
+}
