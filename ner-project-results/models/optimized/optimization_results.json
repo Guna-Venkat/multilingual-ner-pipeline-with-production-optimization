@@ -1,0 +1,43 @@
+{
+  "benchmark": {
+    "pytorch": {
+      "avg_latency_ms": 8.274908065795898,
+      "memory_usage_mb": 0.0,
+      "model_size_mb": 1058.4199485778809,
+      "throughput_qps": 120.84726404798043
+    },
+    "onnx": {
+      "avg_latency_ms": 112.14977264404297,
+      "memory_usage_mb": 0.0,
+      "model_size_mb": 1058.6793479919434,
+      "throughput_qps": 8.916647590307146
+    },
+    "quantized": {
+      "avg_latency_ms": 78.89699220657349,
+      "memory_usage_mb": 0.0,
+      "model_size_mb": 265.40941524505615,
+      "throughput_qps": 12.67475441119139
+    }
+  },
+  "accuracy": {
+    "original_accuracy": 0.8873517786561265,
+    "onnx_accuracy": 0.8873517786561265,
+    "quantized_accuracy": 0.8992094861660079
+  },
+  "config": {
+    "model_path": "./models/student_distilled",
+    "max_length": 128,
+    "iterations": 100
+  },
+  "summary": {
+    "size_reduction": {
+      "pytorch_to_onnx": -0.2593994140625,
+      "pytorch_to_quantized": 793.0105333328247,
+      "percentage_reduction": 74.92399726576707
+    },
+    "speedup": {
+      "pytorch_to_onnx": 0.07378443906489217,
+      "pytorch_to_quantized": 0.10488242750914978
+    }
+  }
+}

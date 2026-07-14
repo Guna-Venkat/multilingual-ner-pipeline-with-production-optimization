@@ -1,0 +1,19 @@
+{
+  "model_type": "onnx_quantized",
+  "max_length": 128,
+  "label_names": [
+    "O",
+    "B-PER",
+    "I-PER",
+    "B-ORG",
+    "I-ORG",
+    "B-LOC",
+    "I-LOC"
+  ],
+  "num_labels": 7,
+  "optimization_results": {
+    "latency_ms": 78.89699220657349,
+    "size_mb": 265.40941524505615,
+    "accuracy": 0.8992094861660079
+  }
+}

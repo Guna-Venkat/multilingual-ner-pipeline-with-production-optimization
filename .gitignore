@@ -15,27 +15,28 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Machine Learning Weights & Checkpoints (Ignore Large Files)
-*.safetensors
-*.bin
-*.onnx
-*.pt
-*.pth
-*.pkl
-*.h5
-*.model
-
-# Databases & Studies
-*.db
-*.sqlite
-
-# Local Run Artifacts and Caches
+# Machine Learning Weights & Checkpoints
+# Allow LFS models, but ignore general/temporary weights elsewhere
 wandb/
 .ipynb_checkpoints/
 tmp*/
 *_code.txt
 
-# Ignore large binary folders explicitly
-ner-project-results/
+# Whitelist Important Model Files inside ner-project-results for Git LFS
+ner-project-results/*
+!ner-project-results/models/
+!ner-project-results/models/teacher/
+ner-project-results/models/teacher/model.safetensors
+!ner-project-results/models/student_distilled/
+!ner-project-results/models/student_distilled/model.safetensors
+!ner-project-results/models/optuna_tuned/
+!ner-project-results/models/optuna_tuned/optuna.db
+!ner-project-results/models/optuna_tuned/final_model/
+!ner-project-results/models/optuna_tuned/final_model/model.safetensors
+!ner-project-results/models/optimized/
+!ner-project-results/models/optimized/deployment/
+!ner-project-results/models/optimized/deployment/model.onnx
+
+# Ignore other notebooks models
 notebooks/models/
 notebooks/ner-project-results/
